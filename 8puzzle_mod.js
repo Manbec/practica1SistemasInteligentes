@@ -118,8 +118,9 @@ function move_null(originalMatrix, direction, nullPosX, nullPosY){
     }
 }
 
-depth_first(matrix);
-function depth_first(matrix){
+breadth_first(matrix);
+
+function breadth_first(matrix){
     pendingStates.push(matrix);
     while(!found){
         nullPosX,nullPosY = find_null(pendingStates[0]);
@@ -144,6 +145,6 @@ function depth_first(matrix){
         console.log("Visited:" + visitedStates);
     }
 }
-function breadth_first(matrix){
+function depth_first(matrix){
     
 }
