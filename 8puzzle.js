@@ -1,8 +1,11 @@
-
+    
 var blocks = [' ', 1,2,3,4,5,6,7,8];
 var visitedStates = [];
 var pendingStates = [];
+var pendingStatesStrings = [];
+
 var goalState = " 12345678";
+goalState = "1283 7645";
 var found=false;
 
 Direction = {
@@ -36,15 +39,15 @@ function shuffle(array) {
 shuffle(blocks);
 
 //Prueba no random
-blocks=[3,1,2,6,4,5," ",7,8]
-
-var matrix = [];
+//blocks=[3,1,2,6,4,5," ",7,8]
+blocks=[1,4,2,3,5,8,6," ",7]
+var puzzle = {matrix:[], nullPosX: 0, nullPosY: 0};
 count = 0;
 for(var i=0; i<3; i++) {
-    matrix[i] = [];
+    puzzle.matrix[i] = [];
     for(var j=0; j<3; j++) {
-        if(blocks[count]==' '){nullPosX = i; nullPosY = j;}
-        matrix[i][j] = blocks[count];
+        if(blocks[count]==' '){puzzle.nullPosX = i; puzzle.nullPosY = j;}
+        puzzle.matrix[i][j] = blocks[count];
         document.getElementById('cell'+count).innerHTML = blocks[count++];
     }
 }
@@ -69,81 +72,234 @@ function find_null(matrix){
     return nullPosX, nullPosY;
 }
 
+function copy_matrix(puzzle){
+    var p = {matrix:[], nullPosX: puzzle.nullPosX, nullPosY: puzzle.nullPosY}
+    for(var i=0; i<puzzle.matrix.length; i++) {
+        p.matrix[i]=[];
+        for(var j=0; j<puzzle.matrix[i].length; j++) {
+            p.matrix[i][j]=puzzle.matrix[i][j];
+        }
+    }
+    return p;
+}
+
 /*
 var visitedStates = ["268 17435", "4513872 6", "237456 81", "2158736 4"];
 var a = fruits.indexOf("237456 81");
 */
 
-function copy_matrix(matrix){
-    var matrixCopy=[];
-    for(var i=0; i<matrix.length; i++) {
-        matrixCopy[i]=[];
-        for(var j=0; j<matrix[i].length; j++) {
-            matrixCopy[i][j]=matrix[i][j];
-        }
-    }
-    return matrixCopy;
-}
-
-function move_null(originalMatrix, direction, nullPosX, nullPosY){
-    var matrix = copy_matrix(originalMatrix);
-
+function move_null(puzzle, direction){
     switch (direction){
         case Direction.UP:
-            var temp = matrix[nullPosX][nullPosY-1];
-            matrix[nullPosX][nullPosY] = temp;
-            matrix[nullPosX][nullPosY-1] = ' ';
+            var temp = puzzle.matrix[puzzle.nullPosX-1][puzzle.nullPosY];
+            puzzle.matrix[puzzle.nullPosX][puzzle.nullPosY] = temp;
+            puzzle.matrix[puzzle.nullPosX-1][puzzle.nullPosY] = ' ';
+            puzzle.nullPosX--;
             break;
         case Direction.RIGHT:
-            var temp = matrix[nullPosX+1][nullPosY];
-            matrix[nullPosX][nullPosY] = temp;
-            matrix[nullPosX+1][nullPosY] = ' ';
+            var temp = puzzle.matrix[puzzle.nullPosX][puzzle.nullPosY+1];
+            puzzle.matrix[puzzle.nullPosX][puzzle.nullPosY] = temp;
+            puzzle.matrix[puzzle.nullPosX][puzzle.nullPosY+1] = ' ';
+            puzzle.nullPosY++;
             break;
         case Direction.LEFT:
-            var temp = matrix[nullPosX-1][nullPosY];
-            matrix[nullPosX][nullPosY] = temp;
-            matrix[nullPosX-1][nullPosY] = ' ';
+            var temp = puzzle.matrix[puzzle.nullPosX][puzzle.nullPosY-1];
+            puzzle.matrix[puzzle.nullPosX][puzzle.nullPosY] = temp;
+            puzzle.matrix[puzzle.nullPosX][puzzle.nullPosY-1] = ' ';
+            puzzle.nullPosY--;
             break;
         case Direction.DOWN:
-            var temp = matrix[nullPosX][nullPosY+1];
-            matrix[nullPosX][nullPosY] = temp;
-            matrix[nullPosX][nullPosY+1] = ' ';
+            var temp = puzzle.matrix[puzzle.nullPosX+1][puzzle.nullPosY];
+            puzzle.matrix[puzzle.nullPosX][puzzle.nullPosY] = temp;
+            puzzle.matrix[puzzle.nullPosX+1][puzzle.nullPosY] = ' ';
+            puzzle.nullPosX++;
             break;
     }
-    if(visitedStates.indexOf(matrix_to_state(matrix))==-1){
-        pendingStates.push(matrix);
-        if(matrix_to_state(matrix)==goalState){
-            found=true;
-        }
+    return puzzle;
+}
+
+// X arriba-,  abajo+
+// Y izq -, derecha +
+//breadth_first(puzzle);
+depth_first(puzzle);
+function breadth_first(puzzle){
+    'use strict';
+    pendingStates.push(puzzle);
+    var step = 0;
+    while(!found && pendingStates.length<4000){
+                puzzle = Object.create(pendingStates[0]);
+                var stateStr = matrix_to_state(puzzle.matrix); 
+                console.log("visiting: "+stateStr);
+                //console.log(puzzle);
+                pendingStates.shift();
+                pendingStatesStrings.shift();
+                if(stateStr==goalState){
+                    found=true;
+                    console.log("found!");
+                    return;
+                }
+
+                visitedStates.push(stateStr);
+                if(puzzle.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
+                    //console.log("left");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.LEFT);
+                    var pState = matrix_to_state(p.matrix); 
+                    //console.log(pState);
+
+                    if(visitedStates.indexOf(pState)==-1){
+                        pendingStates.push(p);
+                        pendingStatesStrings.push(pState);
+                    }
+                }
+                if(puzzle.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
+                    //console.log("right");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.RIGHT);
+                    var pState = matrix_to_state(p.matrix); 
+                    //console.log(pState);
+
+                    if(visitedStates.indexOf(pState)==-1){
+                        pendingStates.push(p);
+                        pendingStatesStrings.push(pState);
+                    }
+                }
+                if(puzzle.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
+                    //console.log("up");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.UP);
+                    var pState = matrix_to_state(p.matrix); 
+                    //console.log(pState)
+
+                    if(visitedStates.indexOf(pState)==-1){
+                        pendingStates.push(p);
+                        pendingStatesStrings.push(pState);
+                    }
+                }
+                if(puzzle.nullPosX<2){ // si puedes mover el null para abajo (o una ficha para arriba)
+                    //console.log("down");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.DOWN);
+                    var pState = matrix_to_state(p.matrix); 
+                    //console.log(pState)
+                    if(visitedStates.indexOf(pState)==-1){
+                        pendingStates.push(p);
+                        pendingStatesStrings.push(pState);
+                    }
+                }
+
+                /*
+                for(var i=0; i<pendingStates.length;i++){
+                    console.log("Pending:" + matrix_to_state(pendingStates[i]));
+                }
+                */
+                setTimeout(function(pStates, pStateStrings, visitedStates,count) { 
+                    
+                    console.log("step: " + count);
+                    console.log("pending ("+pendingStatesStrings.length+")");
+                    //console.log(pendingStates);
+                    console.log(pendingStatesStrings);
+                    console.log("visited ("+pendingStatesStrings.length+")");
+                    console.log(visitedStates);
+                }(pendingStates, pendingStatesStrings, visitedStates, count), 1);
+                sleep(2);
+                step++;
     }
 }
 
-breadth_first(matrix);
-function breadth_first(matrix){
-    pendingStates.push(matrix);
+function depth_first(puzzle){
+    'use strict';
+    pendingStates.push(puzzle);
+    var step = 0;
+    var splicepos = 0;
     while(!found){
-        nullPosX,nullPosY = find_null(pendingStates[0]);
-        if(nullPosX>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
-            move_null(pendingStates[0],Direction.LEFT,nullPosX,nullPosY);
-        }
-        if(nullPosX<2){ // si puedes mover el null a la der (o una ficha a la izq)
-            move_null(pendingStates[0],Direction.RIGHT,nullPosX,nullPosY);
-        }
-        if(nullPosY>0){ // si puedes mover el null para arriba (o una ficha para abajo)
-            move_null(pendingStates[0],Direction.UP,nullPosX,nullPosY);
-        }
-        if(nullPosY<2){ // si puedes mover el null para abajo (o una ficha para arriba)
-            move_null(pendingStates[0],Direction.DOWN,nullPosX,nullPosY);
-        }
-        visitedStates.push(matrix_to_state(pendingStates[0]));
-        pendingStates.shift();
 
-        for(var i=0; i<pendingStates.length;i++){
-            console.log("Pending:" + matrix_to_state(pendingStates[i]));
-        }
-        console.log("Visited:" + visitedStates);
+                splicepos = 0;
+                puzzle = Object.create(pendingStates[0]);
+                var stateStr = matrix_to_state(puzzle.matrix); 
+                console.log("visiting: "+stateStr);
+                //console.log(puzzle);
+                pendingStates.shift();
+                pendingStatesStrings.shift();
+                if(stateStr==goalState){
+                    found=true;
+                    console.log("found!");
+                    return;
+                }
+
+                visitedStates.push(stateStr);
+
+                if(puzzle.nullPosX<2){ // si puedes mover el null para abajo (o una ficha para arriba)
+                    //console.log("down");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.DOWN);
+                    var pState = matrix_to_state(p.matrix); 
+                    //console.log(pState)
+                    if(visitedStates.indexOf(pState)==-1){
+                        pendingStates.splice(splicepos,0,p);
+                        pendingStatesStrings.splice(splicepos++,0,pState);
+                    }
+                }
+                if(puzzle.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
+                    //console.log("up");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.UP);
+                    var pState = matrix_to_state(p.matrix); 
+                    //console.log(pState)
+
+                    if(visitedStates.indexOf(pState)==-1){
+                        pendingStates.splice(splicepos,0,p);
+                        pendingStatesStrings.splice(splicepos++,0,pState);
+                    }
+                }
+                if(puzzle.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
+                    //console.log("right");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.RIGHT);
+                    var pState = matrix_to_state(p.matrix); 
+                    //console.log(pState);
+
+                    if(visitedStates.indexOf(pState)==-1){
+                        pendingStates.splice(splicepos,0,p);
+                        pendingStatesStrings.splice(splicepos++,0,pState);
+                    }
+                }
+                if(puzzle.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
+                    //console.log("left");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.LEFT);
+                    var pState = matrix_to_state(p.matrix); 
+                    //console.log(pState);
+
+                    if(visitedStates.indexOf(pState)==-1){
+                        pendingStates.splice(splicepos,0,p);
+                        pendingStatesStrings.splice(splicepos,0,pState);
+                    }
+                }
+
+                /*
+                for(var i=0; i<pendingStates.length;i++){
+                    console.log("Pending:" + matrix_to_state(pendingStates[i]));
+                }
+                */
+                setTimeout(function(pStates, pStateStrings, visitedStates) { 
+                    
+                    console.log("pending");
+                    //console.log(pendingStates);
+                    console.log(pendingStatesStrings);
+                    console.log("visited");
+                    console.log(visitedStates);
+                }(pendingStates, pendingStatesStrings, visitedStates), 1);
+                sleep(500);
+                step++;
     }
 }
-function depth_first(matrix){
-    
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+    console.log("woke up!");
 }
