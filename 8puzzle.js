@@ -15,6 +15,13 @@ Direction = {
     DOWN: 3
 }
 
+PositionState = {
+    TRANSITABLE: 0,
+    BLOCKED: 1,
+    START: 2,
+    GOAL: 3
+}
+
 console.log("Inicio");
 var nullPosX, nullPosY;
 function shuffle(array) {
