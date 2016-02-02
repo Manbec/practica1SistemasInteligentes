@@ -26,9 +26,6 @@ function adjacentCells(coord){
     adjacent.push(new Coord(coord.x+1,coord.y,coord.weight+1));
     adjacent.push(new Coord(coord.x,coord.y-1,coord.weight+1));
     adjacent.push(new Coord(coord.x,coord.y+1,coord.weight+1));
-    console.log("soy adj");
-    console.log(adjacent);
-    return adjacent;
 }
 
 function mapCounters(queue){
@@ -46,14 +43,10 @@ function searchPaths(queue){
         if(!found){
             var adjacents = adjacentCells(queue[i]);
             for(var j=0; j<adjacents.length; j++) {
-                console.log("Soy adj actual");
-                console.log(adjacents[j]);
-                console.log(adjacents);
                 if(map[adjacents[j].y][adjacents[j].x]=='X'){
                     console.log("hice splice");
                     adjacents.splice(j,1);
                     j--;
-                    console.log(adjacents);
                 }
                 else if(map[adjacents[j].y][adjacents[j].x]=='S'){
                     found=true;
@@ -72,15 +65,11 @@ function searchPaths(queue){
             }
             for(var j=0; j<adjacents.length; j++){
                 queue.push(adjacents[j]);
-                console.log("Add on queue");
-                console.log(queue);
             }
         }
         else{
             break;
         }
-        console.log("Soy queu");
-        console.log(queue);
     }
     mapCounters(queue);
 }
