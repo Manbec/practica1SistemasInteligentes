@@ -39,7 +39,7 @@ function mapCounters(queue){
     console.log(map);
 }
 
-function searchPaths(queue){
+function searchPaths(queue){ //breadth search
     var found=false;
     for(var i=0; i<queue.length; i++) {
         console.log("Entré");

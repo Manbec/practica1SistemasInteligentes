@@ -1,6 +1,5 @@
     
-var blocks = [' ', 1,2,3,4,5,6,7,8];
-var visitedStates = [];
+rg
 var pendingStates = [];
 var pendingStatesStrings = [];
 
@@ -301,6 +300,132 @@ function depth_first(puzzle){
                 step++;
     }
 }
+
+
+function bruteforce_breadth_first(puzzle){
+    'use strict';
+    pendingStates.push(puzzle);
+    var step = 0;
+    while(!found && pendingStates.length<4000){
+                puzzle = Object.create(pendingStates[0]);
+                var stateStr = matrix_to_state(puzzle.matrix); 
+                console.log("visiting: "+stateStr);
+                //console.log(puzzle);
+                pendingStates.shift();
+                pendingStatesStrings.shift();
+                if(stateStr==goalState){
+                    found=true;
+                    console.log("found!");
+                    return;
+                }
+
+                visitedStates.push(stateStr);
+                if(puzzle.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
+                    //console.log("left");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.LEFT);
+                    var pState = matrix_to_state(p.matrix);
+                }
+                if(puzzle.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
+                    //console.log("right");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.RIGHT);
+                    var pState = matrix_to_state(p.matrix);
+                }
+                if(puzzle.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
+                    //console.log("up");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.UP);
+                    var pState = matrix_to_state(p.matrix);
+                    }
+                }
+                if(puzzle.nullPosX<2){ // si puedes mover el null para abajo (o una ficha para arriba)
+                    //console.log("down");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.DOWN);
+                    var pState = matrix_to_state(p.matrix);
+                }
+
+                /*
+                for(var i=0; i<pendingStates.length;i++){
+                    console.log("Pending:" + matrix_to_state(pendingStates[i]));
+                }
+                */
+                setTimeout(function(pStates, pStateStrings, visitedStates,count) { 
+                    
+                    console.log("step: " + count);
+                    console.log("pending ("+pendingStatesStrings.length+")");
+                    //console.log(pendingStates);
+                    console.log(pendingStatesStrings);
+                }(pendingStates, pendingStatesStrings, visitedStates, count), 1);
+                sleep(2);
+                step++;
+    }
+}
+
+function bruteforce_depth_first(puzzle){
+    'use strict';
+    pendingStates.push(puzzle);
+    var step = 0;
+    var splicepos = 0;
+    while(!found){
+
+                splicepos = 0;
+                puzzle = Object.create(pendingStates[0]);
+                var stateStr = matrix_to_state(puzzle.matrix); 
+                console.log("visiting: "+stateStr);
+                //console.log(puzzle);
+                pendingStates.shift();
+                pendingStatesStrings.shift();
+                if(stateStr==goalState){
+                    found=true;
+                    console.log("found!");
+                    return;
+                }
+
+                visitedStates.push(stateStr);
+
+                if(puzzle.nullPosX<2){ // si puedes mover el null para abajo (o una ficha para arriba)
+                    //console.log("down");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.DOWN);
+                    var pState = matrix_to_state(p.matrix); 
+                }
+                if(puzzle.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
+                    //console.log("up");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.UP);
+                    var pState = matrix_to_state(p.matrix);
+                }
+                if(puzzle.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
+                    //console.log("right");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.RIGHT);
+                    var pState = matrix_to_state(p.matrix);
+                }
+                if(puzzle.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
+                    //console.log("left");
+                    let p = copy_matrix(puzzle);
+                    p = move_null(p,Direction.LEFT);
+                    var pState = matrix_to_state(p.matrix);
+                }
+
+                /*
+                for(var i=0; i<pendingStates.length;i++){
+                    console.log("Pending:" + matrix_to_state(pendingStates[i]));
+                }
+                */
+                setTimeout(function(pStates, pStateStrings, visitedStates) { 
+                    
+                    console.log("pending");
+                    //console.log(pendingStates);
+                    console.log(pendingStatesStrings);
+                }(pendingStates, pendingStatesStrings, visitedStates), 1);
+                sleep(500);
+                step++;
+    }
+}
+
 function sleep(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
