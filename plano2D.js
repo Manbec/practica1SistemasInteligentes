@@ -18,7 +18,7 @@ function Coord(x,y,weight){
 }
 
 var queue = [new Coord(3,8,0)];
-
+var path = [];
 
 function adjacentCells(coord){
     var adjacent = [];
@@ -26,23 +26,66 @@ function adjacentCells(coord){
     adjacent.push(new Coord(coord.x+1,coord.y,coord.weight+1));
     adjacent.push(new Coord(coord.x,coord.y-1,coord.weight+1));
     adjacent.push(new Coord(coord.x,coord.y+1,coord.weight+1));
-    console.log("soy adj");
-    console.log(adjacent);
     return adjacent;
+}
+
+function printMatrix(map){
+    var line="";
+    for(var i=0;i<map.length;i++){
+        for(var j=0;j<map[i].length;j++){
+            line+=map[i][j];
+        }
+        console.log(line);
+        line="";
+    }
+}
+
+function printPath(path){
+    console.log("This is the path:");
+    for(var i=path.length-1;i>=0;i--){
+        console.log("(",path[i].x,",",path[i].y,",",path[i].weight,")");
+    }
 }
 
 function mapCounters(queue){
     for(var i=0; i<queue.length; i++){
         map[queue[i].y][queue[i].x]=queue[i].weight;
     }
-    console.log("This is map counter");
-    console.log(map);
+}
+
+
+function checkAdjacents(coord){
+    var adjacent = [];
+    adjacent.push(new Coord(coord.x-1,coord.y,map[coord.y][coord.x-1]));
+    adjacent.push(new Coord(coord.x+1,coord.y,map[coord.y][coord.x+1]));
+    adjacent.push(new Coord(coord.x,coord.y-1,map[coord.y-1][coord.x]));
+    adjacent.push(new Coord(coord.x,coord.y+1,map[coord.y+1][coord.x]));
+    return adjacent;
+}
+
+function savePath(path){
+    var newNext=false;
+    for(var i=0; i<path.length;i++){
+        var adjacents=checkAdjacents(path[i]);
+        var next;
+        for(var j = 1; j<adjacents.length; j++){
+            if(adjacents[j].weight!="X"  && adjacents[j].weight!="_" && adjacents[j].weight<path[i].weight){
+                if(!next || adjacents[j].weight<next.weight){
+                    next=adjacents[j];
+                    newNext=true;
+                }
+            }
+        }
+        if(newNext){
+            path.push(next);
+            newNext=false;
+        }
+    }
 }
 
 function searchPaths(queue){ //breadth search
     var found=false;
     for(var i=0; i<queue.length; i++) {
-        console.log("Entré");
         if(!found){
             var adjacents = adjacentCells(queue[i]);
             for(var j=0; j<adjacents.length; j++) {
@@ -53,6 +96,7 @@ function searchPaths(queue){ //breadth search
                 else if(map[adjacents[j].y][adjacents[j].x]=='S'){
                     found=true;
                     console.log("Found S");
+                    path.push(adjacents[j]);
                 }
                 else{
                     for(var k=0; k<queue.length;k++){
@@ -73,7 +117,9 @@ function searchPaths(queue){ //breadth search
         }
     }
     mapCounters(queue);
+    savePath(path);
+    printMatrix(map);
+    printPath(path);
 }
 
 searchPaths(queue);
-var visitedStates = [];
