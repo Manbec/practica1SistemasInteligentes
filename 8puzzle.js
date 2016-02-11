@@ -4,8 +4,12 @@ var visitedStates = [];
 var pendingStates = [];
 var pendingStatesStrings = [];
 
+var priority_queue = [];
+
+
 var goalState = " 12345678";
-goalState = "1283 7645";
+//goalState = "1283 7645";
+goalState="12345 876"
 var found=false;
 
 Direction = {
@@ -47,7 +51,8 @@ shuffle(blocks);
 
 //Prueba no random
 //blocks=[3,1,2,6,4,5," ",7,8]
-blocks=[1,4,2,3,5,8,6," ",7]
+//blocks=[1,4,2,3,5,8,6," ",7]
+blocks=[" ",2,3,1,4,5,8,7,6]
 var puzzle = {matrix:[], nullPosX: 0, nullPosY: 0};
 count = 0;
 for(var i=0; i<3; i++) {
@@ -128,7 +133,8 @@ function move_null(puzzle, direction){
 // X arriba-,  abajo+
 // Y izq -, derecha +
 //breadth_first(puzzle);
-depth_first(puzzle);
+//depth_first(puzzle);
+a_star(puzzle);
 function breadth_first(puzzle){
     'use strict';
     pendingStates.push(puzzle);
@@ -301,6 +307,94 @@ function depth_first(puzzle){
                 step++;
     }
 }
+
+
+
+function State(board,moves,prior,prev){
+    this.board = board;
+    this.moves = moves;
+    this.prior = prior;
+    this.prev = prev;
+}
+
+function calculate_priority(state){
+    var prior=0;
+    for(var i=0;i<state.length;i++){
+        if(state[i]!=goalState[i]){
+            prior++;
+        }
+    }
+    return prior;
+}
+function find_lower(priority){
+    var lower= priority[0];
+    var lowerIndex=0;
+    for(var i=0;i<priority.length;i++){
+        if(priority[i].prior<lower.prior){
+            lowerIndex=i;
+        }
+    }
+    return lowerIndex;
+}
+
+function a_star(puzzle){
+    'use strict'
+    priority_queue.push(new State(puzzle,0,0,null));
+    priority_queue[0].prior=calculate_priority(matrix_to_state(priority_queue[0].board.matrix));
+    var lower=priority_queue[0];
+    var lowerIndex=0;
+    var stop=0;
+    while (matrix_to_state(lower.board.matrix)!=goalState){
+        stop++;
+        if(lower.board.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
+            console.log("left");
+            let p = copy_matrix(lower.board);
+            p = move_null(p,Direction.LEFT);
+            var pState = matrix_to_state(p.matrix);
+            var moves = lower.moves + 1;
+            var prior = calculate_priority(pState) + moves;
+            priority_queue.push(new State(p,moves,prior,matrix_to_state(lower.board.matrix)));
+            //console.log(pState);
+        }
+        if(lower.board.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
+            console.log("right");
+            let p = copy_matrix(lower.board);
+            p = move_null(p,Direction.RIGHT);
+            var pState = matrix_to_state(p.matrix);
+            var moves = lower.moves + 1;
+            var prior = calculate_priority(pState) + moves;
+            priority_queue.push(new State(p,moves,prior,matrix_to_state(lower.board.matrix)));
+            //console.log(priority_queue);
+            //console.log(pState);
+        }
+        if(lower.board.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
+            console.log("up");
+            let p = copy_matrix(lower.board);
+            p = move_null(p,Direction.UP);
+            var pState = matrix_to_state(p.matrix); 
+            var moves = lower.moves + 1;
+            var prior = calculate_priority(pState) + moves;
+            priority_queue.push(new State(p,moves,prior,matrix_to_state(lower.board.matrix)));
+        }
+        if(lower.board.nullPosX<2){ // si puedes mover el null para abajo (o una ficha para arriba)
+            console.log("down");
+            let p = copy_matrix(lower.board);
+            p = move_null(p,Direction.DOWN);
+            var pState = matrix_to_state(p.matrix); 
+            var moves = lower.moves + 1;
+            var prior = calculate_priority(pState) + moves
+            priority_queue.push(new State(p,moves,prior,matrix_to_state(lower.board.matrix)));
+        }
+        priority_queue.splice(lowerIndex,1);
+        lowerIndex = find_lower(priority_queue);
+        lower=priority_queue[lowerIndex];
+    }
+    console.log(priority_queue);
+    console.log(lower);
+    console.log()
+}
+
+
 function sleep(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
