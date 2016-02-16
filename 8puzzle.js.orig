@@ -1,14 +1,11 @@
     
-var blocks = [' ', 1,2,3,4,5,6,7,8];
-var visitedStates = [];
+rg
 var pendingStates = [];
 var pendingStatesStrings = [];
 
 //a_star and greedy
 var priority_queue = [];
 var closed_states = [];
-
-var running  = true;
 
 
 var goalState = " 12345678";
@@ -56,7 +53,6 @@ shuffle(blocks);
 //Prueba no random
 //blocks=[3,1,2,6,4,5," ",7,8]
 //blocks=[1,4,2,3,5,8,6," ",7]
-
 blocks=[" ",2,3,1,4,5,8,7,6]
 var puzzle = {matrix:[], nullPosX: 0, nullPosY: 0};
 count = 0;
@@ -139,12 +135,11 @@ function move_null(puzzle, direction){
 // Y izq -, derecha +
 //breadth_first(puzzle);
 //depth_first(puzzle);
-
 function breadth_first(puzzle){
     'use strict';
     pendingStates.push(puzzle);
     var step = 0;
-    while(!found && running){
+    while(!found && pendingStates.length<4000){
                 puzzle = Object.create(pendingStates[0]);
                 var stateStr = matrix_to_state(puzzle.matrix); 
                 console.log("visiting: "+stateStr);
@@ -230,7 +225,7 @@ function depth_first(puzzle){
     pendingStates.push(puzzle);
     var step = 0;
     var splicepos = 0;
-    while(!found && running){
+    while(!found){
 
                 splicepos = 0;
                 puzzle = Object.create(pendingStates[0]);
@@ -314,6 +309,7 @@ function depth_first(puzzle){
 }
 
 
+<<<<<<< HEAD
 function bruteforce_breadth_first(puzzle){
     'use strict';
     pendingStates.push(puzzle);
@@ -373,6 +369,7 @@ function bruteforce_breadth_first(puzzle){
                 sleep(2);
                 step++;
     }
+}
 
 function bruteforce_depth_first(puzzle){
     'use strict';
@@ -437,6 +434,7 @@ function bruteforce_depth_first(puzzle){
     }
 }
 
+=======
 
 function State(board,moves,prior,prev){
     this.board = board;
@@ -733,6 +731,7 @@ function a_star_opt(puzzle){
 }
 
 
+>>>>>>> 1d253a060485784e6b888f81cdd43e549afd7a65
 function sleep(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
