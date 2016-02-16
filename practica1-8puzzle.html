@@ -14,9 +14,31 @@ td {
 	display: table-cell;
 	vertical-align: middle;
 }
+a {
+  background: #ccc;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 20px;
+  margin: 5px;
+}
 </style>
 </head>
 <body>
+<a onclick="breadth_first(puzzle);"> Breadth First </a>
+<a onclick="bruteforce_depth_first(puzzle)"> Depth First </a>
+<a onclick="bruteforce_breadth_first(puzzle)"> Breadth First (adicionado con aprendizaje de visitados) </a>
+<a onclick="depth_first(puzzle)"> Depth First (Iterativo)(adicionado con aprendizaje de visitados)</a>
+
+
+<a onclick="greedy_search(puzzle);"> Greedy Search </a>
+
+<a onclick="a_star(puzzle);"> A *</a>
+<a onclick="greedy_search_opt(puzzle);"> Greedy Search (adicionado con aprendizaje de visitados)</a>
+
+<a onclick="a_star_opt(puzzle);"> A * (adicionado con aprendizaje de visitados)</a>
+
+<a onclick="deactivate();" style="background: black;"> Bloquear proceso </a>
 <table>
   <tr>
     <td id="cell0"></td>

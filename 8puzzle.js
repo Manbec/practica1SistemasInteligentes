@@ -30,6 +30,13 @@ PositionState = {
     GOAL: 3
 }
 
+function activate(){
+    running = true;
+}
+function deactivate(){
+    running = false;
+}
+
 console.log("Inicio");
 var nullPosX, nullPosY;
 function shuffle(array) {
@@ -557,7 +564,7 @@ function find_lower(priority){
 //a_star(puzzle);
 //a_star_opt(puzzle);
 //greedy_search(puzzle)
-greedy_search_opt(puzzle);
+//greedy_search_opt(puzzle);
 
 function greedy_search(puzzle){
     'use strict'
