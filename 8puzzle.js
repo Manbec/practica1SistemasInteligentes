@@ -12,8 +12,8 @@ var running  = true;
 
 
 var goalState = " 12345678";
-//goalState = "1283 7645";
-goalState="123 56487"
+goalState = "1283 7645";
+//goalState="123 56487"
 var found=false;
 
 Direction = {
@@ -77,9 +77,9 @@ shuffle(blocks);
 
 //Prueba no random
 //blocks=[3,1,2,6,4,5," ",7,8]
-//blocks=[1,4,2,3,5,8,6," ",7]
+blocks=[1,4,2,3,5,8,6," ",7]
 
-blocks=[" ",2,3,1,4,5,8,7,6]
+//blocks=[" ",2,3,1,4,5,8,7,6]
 var puzzle = {matrix:[], nullPosX: 0, nullPosY: 0};
 count = 0;
 for(var i=0; i<3; i++) {
@@ -159,8 +159,6 @@ function move_null(puzzle, direction){
 
 // X arriba-,  abajo+
 // Y izq -, derecha +
-//breadth_first(puzzle);
-//depth_first(puzzle);
 
 //a_star(puzzle);
 //a_star_opt(puzzle);
@@ -282,8 +280,8 @@ function depth_first_recursive(puzzle){
                     var pState = matrix_to_state(p.matrix); 
                     //console.log(pState)
                     if(visitedStates.indexOf(pState)==-1){
-                        pendingStates.splice(splicepos,0,p);
-                        pendingStatesStrings.splice(splicepos++,0,pState);
+                       depth_first_recursive(p);
+                       return false;
                     }
                 }
                 if(puzzle.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
@@ -294,8 +292,8 @@ function depth_first_recursive(puzzle){
                     //console.log(pState)
 
                     if(visitedStates.indexOf(pState)==-1){
-                        pendingStates.splice(splicepos,0,p);
-                        pendingStatesStrings.splice(splicepos++,0,pState);
+                        depth_first_recursive(p);
+                        return false;
                     }
                 }
                 if(puzzle.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
@@ -306,8 +304,8 @@ function depth_first_recursive(puzzle){
                     //console.log(pState);
 
                     if(visitedStates.indexOf(pState)==-1){
-                        pendingStates.splice(splicepos,0,p);
-                        pendingStatesStrings.splice(splicepos++,0,pState);
+                        depth_first_recursive(p);
+                        return false;
                     }
                 }
                 if(puzzle.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
@@ -318,8 +316,8 @@ function depth_first_recursive(puzzle){
                     //console.log(pState);
 
                     if(visitedStates.indexOf(pState)==-1){
-                        pendingStates.splice(splicepos,0,p);
-                        pendingStatesStrings.splice(splicepos,0,pState);
+                        depth_first_recursive(p);
+                        return false;
                     }
                 }
 
@@ -881,3 +879,8 @@ function sleep(milliseconds) {
   }
     console.log("woke up!");
 }
+
+
+//breadth_first(puzzle);
+//depth_first(puzzle);
+depth_first_recursive(puzzle);
