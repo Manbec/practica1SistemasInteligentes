@@ -21,6 +21,28 @@ Direction = {
 var dirArray = [Direction.UP,Direction.RIGHT,Direction.LEFT,Direction.DOWN];
 var dirArrayStr = ["UP","RIGHT","LEFT","DOWN"];
 
+function activate(){
+    map = [
+['X','X','X','X','X','X','X','X','X','X'],
+['X','_','_','_','X','X','_','X','_','X'],
+['X','_','X','_','_','X','_','_','_','X'],
+['X','_','X','X','_','_','_','X','_','X'],
+['X','_','X','_','_','X','_','_','_','X'],
+['X','_','_','_','X','X','_','X','_','X'],
+['X','_','X','_','_','X','_','X','_','X'],
+['X','_','X','X','_','_','_','X','S','X'],
+['X','_','_',0,'_','X','_','_','_','X'],
+['X','X','X','X','X','X','X','X','X','X']   
+];
+    queue = [new Coord(3,8,0)];
+    path = [];
+    true;
+}
+function deactivate(){
+    running = false;
+}
+
+
 function Coord(x,y,weight){
     this.x = x;
     this.y = y;

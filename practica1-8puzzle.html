@@ -15,6 +15,7 @@ td {
 	vertical-align: middle;
 }
 a {
+   line-height: 90px;
   background: #ccc;
   color: white;
   border-radius: 5px;
@@ -25,20 +26,19 @@ a {
 </style>
 </head>
 <body>
-<a onclick="breadth_first(puzzle);"> Breadth First </a>
-<a onclick="bruteforce_depth_first(puzzle)"> Depth First </a>
-<a onclick="bruteforce_breadth_first(puzzle)"> Breadth First (adicionado con aprendizaje de visitados) </a>
-<a onclick="depth_first(puzzle)"> Depth First (Iterativo)(adicionado con aprendizaje de visitados)</a>
+  <div>
+<a onclick="activate();bruteforce_breadth_first(puzzle);"> Breadth First </a>
+<a onclick="activate();bruteforce_depth_first(puzzle);"> Depth First </a>
+<a onclick="activate();breadth_first(puzzle);"> Breadth First (adicionado con aprendizaje de visitados) </a>
+<a onclick="activate();depth_first(puzzle);"> Depth First (Iterativo)(adicionado con aprendizaje de visitados)</a>
+<a onclick="activate();greedy_search(puzzle);"> Greedy Search </a>
 
+<a onclick="activate();a_star(puzzle);"> A *</a>
+<a onclick="activate();greedy_search_opt(puzzle);"> Greedy Search (adicionado con aprendizaje de visitados)</a>
 
-<a onclick="greedy_search(puzzle);"> Greedy Search </a>
-
-<a onclick="a_star(puzzle);"> A *</a>
-<a onclick="greedy_search_opt(puzzle);"> Greedy Search (adicionado con aprendizaje de visitados)</a>
-
-<a onclick="a_star_opt(puzzle);"> A * (adicionado con aprendizaje de visitados)</a>
-
-<a onclick="deactivate();" style="background: black;"> Bloquear proceso </a>
+<a onclick="activate();a_star_opt(puzzle);"> A * (adicionado con aprendizaje de visitados)</a>
+</div>
+</div>
 <table>
   <tr>
     <td id="cell0"></td>
