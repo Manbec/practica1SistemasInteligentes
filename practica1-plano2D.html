@@ -15,6 +15,7 @@ td {
 	vertical-align: middle;
 }
 a {
+   line-height: 90px;
   background: #ccc;
   color: white;
   border-radius: 5px;
@@ -25,16 +26,11 @@ a {
 </style>
 </head>
 <body>
-<a onclick="activate();bruteforce_breadth_first(puzzle);"> Breadth First </a>
-<a onclick="activate();bruteforce_depth_first(puzzle);"> Depth First </a>
-<a onclick="activate();breadth_first(puzzle);"> Breadth First (adicionado con aprendizaje de visitados) </a>
-<a onclick="activate();depth_first(puzzle);"> Depth First (Iterativo)(adicionado con aprendizaje de visitados)</a>
-<a onclick="activate();greedy_search(puzzle);"> Greedy Search </a>
-
-<a onclick="activate();a_star(puzzle);"> A *</a>
-<a onclick="activate();greedy_search_opt(puzzle);"> Greedy Search (adicionado con aprendizaje de visitados)</a>
-
-<a onclick="activate();a_star_opt(puzzle);"> A * (adicionado con aprendizaje de visitados)</a>
+<a onclick="activate();searchPaths(queue);"> Breadth First (adicionado con aprendizaje de visitados) </a>
+<a onclick="activate();depthsearchPaths(queue,0, Direction.UP);"> Depth First (adicionado con aprendizaje de visitados y backtracking)</a>
+<a onclick="activate();depthsearchPathsIterative(queue,0, Direction.UP);"> Depth First (Iterativo)</a>
+<a onclick="activate();aStarSearchPaths(queue,0);">A*</a>
+<a onclick="activate();greedySearchPaths(queue,0);">Greedy Search</a>
 <script type="text/javascript" src="plano2D.js"></script>
 </body>
 </html>
