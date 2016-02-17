@@ -614,11 +614,10 @@ function greedy_search(puzzle){
     priority_queue[0].prior=calculate_priority(matrix_to_state(priority_queue[0].board.matrix));
     var lower=priority_queue[0];
     var lowerIndex=0;
-    var stop=0;
     while (matrix_to_state(lower.board.matrix)!=goalState && running){
-        stop++;
+        console.log(lower);
         if(lower.board.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
-            console.log("left");
+            //console.log("left");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.LEFT);
             var pState = matrix_to_state(p.matrix);
@@ -627,7 +626,7 @@ function greedy_search(puzzle){
             priority_queue.push(new State(p,moves,prior,matrix_to_state(lower.board.matrix)));
         }
         if(lower.board.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
-            console.log("right");
+            //console.log("right");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.RIGHT);
             var pState = matrix_to_state(p.matrix);
@@ -636,7 +635,7 @@ function greedy_search(puzzle){
             priority_queue.push(new State(p,moves,prior,matrix_to_state(lower.board.matrix)));
         }
         if(lower.board.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
-            console.log("up");
+            //console.log("up");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.UP);
             var pState = matrix_to_state(p.matrix); 
@@ -645,7 +644,7 @@ function greedy_search(puzzle){
             priority_queue.push(new State(p,moves,prior,matrix_to_state(lower.board.matrix)));
         }
         if(lower.board.nullPosX<2){ // si puedes mover el null para abajo (o una ficha para arriba)
-            console.log("down");
+            //console.log("down");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.DOWN);
             var pState = matrix_to_state(p.matrix); 
@@ -674,11 +673,10 @@ function greedy_search_opt(puzzle){
     priority_queue[0].prior=calculate_priority(matrix_to_state(priority_queue[0].board.matrix));
     var lower=priority_queue[0];
     var lowerIndex=0;
-    var stop=0;
     while (matrix_to_state(lower.board.matrix)!=goalState && running){
-        stop++;
+        console.log(lower);
         if(lower.board.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
-            console.log("left");
+            //console.log("left");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.LEFT);
             var pState = matrix_to_state(p.matrix);
@@ -689,7 +687,7 @@ function greedy_search_opt(puzzle){
             }
         }
         if(lower.board.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
-            console.log("right");
+            //console.log("right");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.RIGHT);
             var pState = matrix_to_state(p.matrix);
@@ -700,7 +698,7 @@ function greedy_search_opt(puzzle){
             }
         }
         if(lower.board.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
-            console.log("up");
+            //console.log("up");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.UP);
             var pState = matrix_to_state(p.matrix); 
@@ -711,7 +709,7 @@ function greedy_search_opt(puzzle){
             }
         }
         if(lower.board.nullPosX<2){ // si puedes mover el null para abajo (o una ficha para arriba)
-            console.log("down");
+            //console.log("down");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.DOWN);
             var pState = matrix_to_state(p.matrix); 
@@ -743,11 +741,10 @@ function a_star(puzzle){
     priority_queue[0].prior=calculate_priority(matrix_to_state(priority_queue[0].board.matrix));
     var lower=priority_queue[0];
     var lowerIndex=0;
-    var stop=0;
     while (matrix_to_state(lower.board.matrix)!=goalState && running){
-        stop++;
+        console.log(lower);
         if(lower.board.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
-            console.log("left");
+            //console.log("left");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.LEFT);
             var pState = matrix_to_state(p.matrix);
@@ -757,7 +754,7 @@ function a_star(puzzle){
             //console.log(pState);
         }
         if(lower.board.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
-            console.log("right");
+            //console.log("right");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.RIGHT);
             var pState = matrix_to_state(p.matrix);
@@ -768,7 +765,7 @@ function a_star(puzzle){
             //console.log(pState);
         }
         if(lower.board.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
-            console.log("up");
+            //console.log("up");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.UP);
             var pState = matrix_to_state(p.matrix); 
@@ -777,7 +774,7 @@ function a_star(puzzle){
             priority_queue.push(new State(p,moves,prior,matrix_to_state(lower.board.matrix)));
         }
         if(lower.board.nullPosX<2){ // si puedes mover el null para abajo (o una ficha para arriba)
-            console.log("down");
+            //console.log("down");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.DOWN);
             var pState = matrix_to_state(p.matrix); 
@@ -805,11 +802,10 @@ function a_star_opt(puzzle){
     priority_queue[0].prior=calculate_priority(matrix_to_state(priority_queue[0].board.matrix));
     var lower=priority_queue[0];
     var lowerIndex=0;
-    var stop=0;
     while (matrix_to_state(lower.board.matrix)!=goalState && running){
-        stop++;
+        console.log(lower);
         if(lower.board.nullPosY>0){ // si puedes mover el null a la izq (o una ficha a la derecha)
-            console.log("left");
+            //console.log("left");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.LEFT);
             var pState = matrix_to_state(p.matrix);
@@ -821,7 +817,7 @@ function a_star_opt(puzzle){
             //console.log(pState);
         }
         if(lower.board.nullPosY<2){ // si puedes mover el null a la der (o una ficha a la izq)
-            console.log("right");
+            //console.log("right");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.RIGHT);
             var pState = matrix_to_state(p.matrix);
@@ -834,7 +830,7 @@ function a_star_opt(puzzle){
             //console.log(pState);
         }
         if(lower.board.nullPosX>0){ // si puedes mover el null para arriba (o una ficha para abajo)
-            console.log("up");
+            //console.log("up");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.UP);
             var pState = matrix_to_state(p.matrix); 
@@ -845,7 +841,7 @@ function a_star_opt(puzzle){
             }
         }
         if(lower.board.nullPosX<2){ // si puedes mover el null para abajo (o una ficha para arriba)
-            console.log("down");
+            //console.log("down");
             let p = copy_matrix(lower.board);
             p = move_null(p,Direction.DOWN);
             var pState = matrix_to_state(p.matrix); 
